@@ -34,7 +34,6 @@ const App = () => {
   const [groups, setGroups] = useState([]);
   const [filteredContacts, setFilteredContacts] = useState([]);
   const [contact, setContact] = useState({});
-  const [contactQuery, setContactQuery] = useState({ text: "" });
 
   const navigate = useNavigate();
 
@@ -137,15 +136,19 @@ const App = () => {
     }
   };
 
-  const contactSearch = (event) => {
-    setContactQuery({ ...contactQuery, text: event.target.value });
-    const allContacts = contacts.filter((contact) => {
-      return contact.fullname
-        .toLowerCase()
-        .includes(event.target.value.toLowerCase());
-    });
+  let filterTimeout;
+  const contactSearch = (query) => {
+    clearTimeout(filterTimeout);
 
-    setFilteredContacts(allContacts);
+    if (!query) return setFilteredContacts([...contacts]);
+
+    filterTimeout = setTimeout(() => {
+      setFilteredContacts(
+        contacts.filter((contact) => {
+          return contact.fullname.toLowerCase().includes(query.toLowerCase());
+        })
+      );
+    }, 1000);
   };
 
   return (
@@ -163,7 +166,6 @@ const App = () => {
         deleteContact: confirmDelete,
         createContact: createContactForm,
         contactSearch,
-        contactQuery,
       }}
     >
       <div className="App">
