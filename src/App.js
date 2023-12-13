@@ -19,6 +19,8 @@ import {
   COMMENT,
 } from "./helpers/colors";
 
+import { contactSchema } from "./validations/contactValidation";
+
 import {
   getAllContacts,
   getAllGroups,
@@ -34,6 +36,7 @@ const App = () => {
   const [groups, setGroups] = useState([]);
   const [filteredContacts, setFilteredContacts] = useState([]);
   const [contact, setContact] = useState({});
+  const [errors, setErrors] = useState([]);
 
   const navigate = useNavigate();
 
@@ -59,6 +62,8 @@ const App = () => {
     try {
       setLoading((prevLoading) => !prevLoading);
 
+      await contactSchema.validate(contact, { abortEarly: false });
+
       const { status, data } = await createContact(contact);
 
       if (status === 201) {
@@ -66,11 +71,13 @@ const App = () => {
         setContacts(allContacts);
         setFilteredContacts(allContacts);
         setContact({});
+        setErrors([]);
         setLoading((prevLoading) => !prevLoading);
         navigate("/contacts");
       }
     } catch (error) {
       console.log(error);
+      setErrors(error.inner);
     }
   };
 
@@ -166,6 +173,7 @@ const App = () => {
         deleteContact: confirmDelete,
         createContact: createContactForm,
         contactSearch,
+        errors,
       }}
     >
       <div className="App">
