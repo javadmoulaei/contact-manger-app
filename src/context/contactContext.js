@@ -14,5 +14,4 @@ export const contactContext = createContext({
   updateContact: () => {},
   createContact: () => {},
   contactSearch: () => {},
-  errors: [],
 });
