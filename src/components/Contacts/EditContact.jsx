@@ -1,6 +1,7 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useContext } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { useImmer } from "use-immer";
 
 import { contactSchema } from "../../validations/contactValidation";
 
@@ -21,7 +22,7 @@ const EditContact = () => {
   } = useContext(contactContext);
   const navigate = useNavigate();
 
-  const [contact, setContact] = useState({});
+  const [contact, setContact] = useImmer({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -47,13 +48,18 @@ const EditContact = () => {
       if (status === 200) {
         setLoading(false);
 
-        const allContacts = [...contacts];
-        const contactIndex = allContacts.findIndex(
-          (contact) => contact.id == contactId
-        );
-        allContacts[contactIndex] = { ...data };
-        setContacts(allContacts);
-        setFilteredContacts(allContacts);
+        setContacts((draft) => {
+          const contactIndex = draft.findIndex(
+            (contact) => contact.id == contactId
+          );
+          draft[contactIndex] = { ...data };
+        });
+        setFilteredContacts((draft) => {
+          const contactIndex = draft.findIndex(
+            (contact) => contact.id == contactId
+          );
+          draft[contactIndex] = { ...data };
+        });
         navigate("/contacts");
       }
     } catch (err) {
