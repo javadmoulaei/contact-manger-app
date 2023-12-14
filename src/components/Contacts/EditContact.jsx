@@ -2,6 +2,7 @@ import { useEffect, useContext } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { useImmer } from "use-immer";
+import { toast } from "react-toastify";
 
 import { contactSchema } from "../../validations/contactValidation";
 
@@ -12,14 +13,8 @@ import { COMMENT, ORANGE, PURPLE } from "../../helpers/colors";
 
 const EditContact = () => {
   const { contactId } = useParams();
-  const {
-    contacts,
-    setContacts,
-    loading,
-    setLoading,
-    groups,
-    setFilteredContacts,
-  } = useContext(contactContext);
+  const { setContacts, loading, setLoading, groups, setFilteredContacts } =
+    useContext(contactContext);
   const navigate = useNavigate();
 
   const [contact, setContact] = useImmer({});
@@ -47,6 +42,7 @@ const EditContact = () => {
       const { data, status } = await updateContact(values, contactId);
       if (status === 200) {
         setLoading(false);
+        toast.info("مخاطب با موفقیت ویرایش شد.");
 
         setContacts((draft) => {
           const contactIndex = draft.findIndex(

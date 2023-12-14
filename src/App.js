@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { confirmAlert } from "react-confirm-alert";
 import { useImmer } from "use-immer";
+import { ToastContainer, toast } from "react-toastify";
 
 import { contactContext } from "./context/contactContext";
 import {
@@ -61,6 +62,7 @@ const App = () => {
       const { status, data } = await createContact(values);
 
       if (status === 201) {
+        toast.success("مخاطب با موفقیت ساخته شد.");
         setContacts((draft) => {
           draft.push(data);
         });
@@ -120,13 +122,15 @@ const App = () => {
     try {
       setLoading(true);
       const response = await deleteContact(contactId);
+
       if (response) {
-        setContacts((draft) => {
-          draft.filter((contact) => contact.id != contactId);
-        });
-        setFilteredContacts((draft) => {
-          draft.filter((contact) => contact.id != contactId);
-        });
+        toast.error("مخاطب با موفقیت حذف شد.");
+        setContacts((draft) =>
+          draft.filter((contact) => contact.id !== contactId)
+        );
+        setFilteredContacts((draft) =>
+          draft.filter((contact) => contact.id !== contactId)
+        );
         setLoading(false);
       }
     } catch (err) {
@@ -147,6 +151,7 @@ const App = () => {
           return contact.fullname.toLowerCase().includes(query.toLowerCase());
         })
       );
+      toast.info("جستوجو کامل شد");
     }, 1000);
   };
 
@@ -166,6 +171,7 @@ const App = () => {
       }}
     >
       <div className="App">
+        <ToastContainer rtl={true} position="top-right" theme="colored" />
         <Navbar />
         <Routes>
           <Route path="/" element={<Navigate to="/contacts" />} />
