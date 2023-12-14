@@ -84,14 +84,7 @@ const EditContact = () => {
               >
                 <div className="col-md-8">
                   <Formik
-                    initialValues={{
-                      fullname: contact.fullname,
-                      photo: contact.photo,
-                      mobile: contact.mobile,
-                      email: contact.email,
-                      job: contact.job,
-                      group: contact.group,
-                    }}
+                    initialValues={contact}
                     validationSchema={contactSchema}
                     onSubmit={(values) => {
                       submitForm(values);
