@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 
 import { CURRENTLINE, CYAN, ORANGE, PURPLE, RED } from "../../helpers/colors";
-import { Button } from "bootstrap";
 
 const Contact = ({ contact, deleteContact }) => {
   return (

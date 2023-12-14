@@ -3,7 +3,7 @@ import SearchContact from "./Contacts/SearchContact";
 import { PURPLE, BACKGROUND } from "../helpers/colors";
 import { useLocation } from "react-router-dom";
 
-const Navbar = ({ query, search }) => {
+const Navbar = () => {
   const location = useLocation();
   return (
     <nav
